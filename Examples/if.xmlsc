@@ -1,0 +1,22 @@
+<xmlscript>
+    <if>
+        <left>
+            <number>3</number>
+        </left>
+        <right>
+            <number>2</number>
+        </right>
+        <op>==</op>
+        <then>
+            <call type="System.Console" method="WriteLine">
+                <string>bruh how are these equal</string>
+            </call>
+        </then>
+        <else>
+            <call type="System.Console" method="WriteLine">
+                <string>Who would have thought, those two arent equals!</string>
+            </call>
+        </else>
+    </if>
+    
+</xmlscript>
