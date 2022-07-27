@@ -1,0 +1,5 @@
+<xmlscript>
+    <call type="System.Console" method="WriteLine">
+        <string>Hello World!</string>
+    </call>
+</xmlscript>
