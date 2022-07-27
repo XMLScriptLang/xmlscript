@@ -1,0 +1,9 @@
+<xmlscript>
+    <setvar name="myNum">
+        <number>3</number>
+    </setvar>
+    
+    <call type="System.Console" method="WriteLine">
+        <getvar name="myNum"></getvar>
+    </call>
+</xmlscript>
