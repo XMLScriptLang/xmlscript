@@ -18,5 +18,10 @@ namespace xmlscript.FinalNodes
         {
             return null;
         }
+
+        public override string Transpile(Scope scope, Dictionary<string, object> args = null)
+        {
+            return "";
+        }
     }
 }

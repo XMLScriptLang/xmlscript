@@ -31,5 +31,12 @@ namespace xmlscript.FinalNodes
             foreach (Node node in Nodes) node.Visit((ownScope ? Scope.FromParent(scope) : scope));
             return null;
         }
+
+        public override string Transpile(Scope scope, Dictionary<string, object> args = null)
+        {
+            string output = "";
+            foreach (Node node in Nodes) output += node.Transpile(scope) + "\n";
+            return output;
+        }
     }
 }

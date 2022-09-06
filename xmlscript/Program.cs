@@ -14,6 +14,13 @@ namespace xmlscript
                 {
                     Console.WriteLine("Path to run: ");
                     string path = Console.ReadLine();
+                    bool transpile = false;
+
+                    if (path.EndsWith("-t"))
+                    {
+                        transpile = true;
+                        path = path.Substring(0, path.Length - 2);
+                    }
 
                     XmlDocument doc = new XmlDocument();
                     doc.Load(path);
@@ -26,10 +33,22 @@ namespace xmlscript
                         Node n = ParseNode(doc.GetElementsByTagName("xmlscript")[0]);
                         sw.Stop();
                         Debug.WriteLine("Parsing took " + sw.ElapsedMilliseconds + "ms");
-                        sw.Restart();
-                        n.Visit(new Scope());
-                        sw.Stop();
-                        Debug.WriteLine("Interpreting took " + sw.ElapsedMilliseconds + "ms");
+
+                        if (!transpile)
+                        {
+                            sw.Restart();
+                            n.Visit(new Scope());
+                            sw.Stop();
+                            Debug.WriteLine("Interpreting took " + sw.ElapsedMilliseconds + "ms");
+                        }else
+                        {
+                            sw.Restart();
+                            string output = n.Transpile(new Scope());
+                            sw.Stop();
+                            Debug.WriteLine("Transpilation took " + sw.ElapsedMilliseconds + "ms");
+                            Console.WriteLine(output);
+                            Console.ReadKey();
+                        }
                     }else
                     {
                         Console.WriteLine("No root element found! Needs to be named xmlscript!");

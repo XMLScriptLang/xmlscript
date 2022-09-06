@@ -27,5 +27,10 @@ namespace xmlscript.FinalNodes
             scope.Set(attrName, valueNode.Visit(scope));
             return null;
         }
+
+        public override string Transpile(Scope scope, Dictionary<string, object> args = null)
+        {
+            return $"var {attrName} = {valueNode.Transpile(scope)}{Utils.SemicolonOptional(args)}";
+        }
     }
 }

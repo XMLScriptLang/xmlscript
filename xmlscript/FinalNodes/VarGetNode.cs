@@ -22,5 +22,10 @@ namespace xmlscript.FinalNodes
         {
             return scope.Get(attrName);
         }
+
+        public override string Transpile(Scope scope, Dictionary<string, object> args = null)
+        {
+            return attrName;
+        }
     }
 }

@@ -49,5 +49,14 @@ namespace xmlscript.FinalNodes
 
             return null;
         }
+
+        public override string Transpile(Scope scope, Dictionary<string, object> args = null)
+        {
+            return $@"if({ConditionalNode.Transpile(scope)}) {{
+    {FunctionNode.Transpile(scope)}
+}}{(ElseFunctionNode != null ? $@"else {{
+    {ElseFunctionNode.Transpile(scope)}
+}}" : "")}";
+        }
     }
 }
