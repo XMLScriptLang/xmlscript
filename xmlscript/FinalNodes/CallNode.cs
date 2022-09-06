@@ -51,6 +51,18 @@ namespace xmlscript.FinalNodes
             return null;
         }
 
+        public override string Transpile(Scope scope, Dictionary<string, object> args = null)
+        {
+            List<string> methodArgs = new List<string>();
+
+            foreach(Node argNode in argumentNodes)
+            {
+                methodArgs.Add(argNode.Transpile(scope));
+            }
+
+            return $"{attrTypeTarget}.{attrMethodTarget}({methodArgs.Join(", ")});";
+        }
+
         public static Type ResolveType(string name)
         {
             foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())

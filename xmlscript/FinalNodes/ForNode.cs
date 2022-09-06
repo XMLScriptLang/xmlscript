@@ -58,5 +58,13 @@ namespace xmlscript.FinalNodes
 
             return null;
         }
+
+        public override string Transpile(Scope scope, Dictionary<string, object> args = null)
+        {
+            Scope newScope = Scope.FromParent(scope);
+            return @$"for({InitNode.Transpile(newScope)} {ConditionalNode.Transpile(newScope)}; {StepNode.Transpile(newScope)}) {{
+    {FunctionNode.Transpile(newScope)}
+            }}";
+        }
     }
 }

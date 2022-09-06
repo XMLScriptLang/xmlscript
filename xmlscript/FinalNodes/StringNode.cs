@@ -21,5 +21,10 @@ namespace xmlscript.FinalNodes
         {
             return val;
         }
+
+        public override string Transpile(Scope scope, Dictionary<string, object> args = null)
+        {
+            return $"\"{val}\"";
+        }
     }
 }
