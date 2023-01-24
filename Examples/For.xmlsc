@@ -1,0 +1,34 @@
+<xmlscript>
+	<for>
+		<init>
+			<setvar name="test">
+				<number>1</number>
+			</setvar>
+		</init>
+
+		<cond>
+			<left>
+				<getvar name="test"></getvar>
+			</left>
+			<op>&lt;</op>
+			<right>
+				<number>100</number>
+			</right>
+		</cond>
+
+		<step>
+			<setvar name="test">
+				<call type="XMLScript.Lib.XMLMath" method="Add">
+					<getvar name="test"></getvar>
+					<number>1</number>
+				</call>
+			</setvar>
+		</step>
+
+		<do>
+			<call type="System.Console" method="WriteLine">
+				<getvar name="test"></getvar>
+			</call>
+		</do>
+	</for>
+</xmlscript>
