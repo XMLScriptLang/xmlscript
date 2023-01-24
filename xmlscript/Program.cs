@@ -71,6 +71,9 @@ namespace xmlscript
                 case "double":
                 case "num":
                     return new NumberNode().FromXmlTag(node);
+                case "bool":
+                case "boolean":
+                    return new BooleanNode().FromXmlTag(node);
                 case "call":
                     return new CallNode().FromXmlTag(node);
                 case "col":
