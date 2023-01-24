@@ -1,12 +1,14 @@
 <xmlscript>
     <if>
-        <left>
-            <number>3</number>
-        </left>
-        <right>
-            <number>2</number>
-        </right>
-        <op>==</op>
+		<condition>
+            <left>
+                <number>3</number>
+            </left>
+			<op>==</op>
+            <right>
+                <number>2</number>
+            </right>
+		</condition>
         <then>
             <call type="System.Console" method="WriteLine">
                 <string>bruh how are these equal</string>

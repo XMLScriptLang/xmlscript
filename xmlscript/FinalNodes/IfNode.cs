@@ -18,7 +18,7 @@ namespace xmlscript.FinalNodes
 
             foreach(XmlNode childNode in node.ChildNodes)
             {
-                if (childNode.Name == "condition")
+                if (childNode.Name == "condition" || childNode.Name == "cond")
                 {
                     ConditionalNode = new ConditionalNode().FromXmlTag(childNode);
                 }

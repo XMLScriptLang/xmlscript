@@ -20,7 +20,8 @@ namespace xmlscript.FinalNodes
         {
             foreach(XmlNode childNode in node.ChildNodes)
             {
-                Nodes.Add(Program.ParseNode(childNode));
+                var n = Program.ParseNode(childNode);
+                if(n != null) Nodes.Add(n);
             }
 
             return this;

@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmlscript", "xmlscript\xmlscript.csproj", "{385CC5B1-5743-4A02-AE78-56C3F6679286}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xmlscript", "xmlscript\xmlscript.csproj", "{385CC5B1-5743-4A02-AE78-56C3F6679286}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLScript.Lib", "XMLScript.Lib\XMLScript.Lib.csproj", "{D69854F4-D306-405C-A03F-45A6C3281150}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranspilationTest", "TranspilationTest\TranspilationTest.csproj", "{2CBC34F8-0A2C-40B4-BF1A-C8D051E975EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{385CC5B1-5743-4A02-AE78-56C3F6679286}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{385CC5B1-5743-4A02-AE78-56C3F6679286}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{385CC5B1-5743-4A02-AE78-56C3F6679286}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D69854F4-D306-405C-A03F-45A6C3281150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D69854F4-D306-405C-A03F-45A6C3281150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D69854F4-D306-405C-A03F-45A6C3281150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D69854F4-D306-405C-A03F-45A6C3281150}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CBC34F8-0A2C-40B4-BF1A-C8D051E975EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CBC34F8-0A2C-40B4-BF1A-C8D051E975EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CBC34F8-0A2C-40B4-BF1A-C8D051E975EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CBC34F8-0A2C-40B4-BF1A-C8D051E975EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

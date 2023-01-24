@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -13,6 +15,7 @@ namespace xmlscript.FinalNodes
     {
         public string attrTypeTarget = null;
         public string attrMethodTarget = null;
+        public Node onNode = null;
 
         public List<Node> argumentNodes = new List<Node>();
 
@@ -25,6 +28,12 @@ namespace xmlscript.FinalNodes
 
             foreach (XmlNode childNode in node.ChildNodes)
             {
+                if(childNode.Name == "on")
+                {
+                    onNode = Program.ParseNode(childNode);
+                    continue;
+                }
+                
                 argumentNodes.Add(Program.ParseNode(childNode));
             }
 
@@ -47,8 +56,14 @@ namespace xmlscript.FinalNodes
             var method = type.GetMethod(attrMethodTarget, types: argTypes);
             if (method == null) throw new Exception("Unable to resolve method target " + attrMethodTarget);
 
-            method.Invoke(this, args);
-            return null;
+            object executeOn = null;
+            
+            if (onNode != null)
+            {
+                executeOn = onNode.Visit(scope);
+            }
+            
+            return method.Invoke(executeOn, args);
         }
 
         public override string Transpile(Scope scope, Dictionary<string, object> args = null)
@@ -60,7 +75,7 @@ namespace xmlscript.FinalNodes
                 methodArgs.Add(argNode.Transpile(scope));
             }
 
-            return $"{attrTypeTarget}.{attrMethodTarget}({methodArgs.Join(", ")});";
+            return $"{attrTypeTarget}.{attrMethodTarget}({methodArgs.Join(", ")}){Utils.SemicolonOptional(args)}";
         }
 
         public static Type ResolveType(string name)

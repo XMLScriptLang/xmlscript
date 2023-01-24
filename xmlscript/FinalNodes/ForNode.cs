@@ -21,7 +21,7 @@ namespace xmlscript.FinalNodes
                 {
                     if(childNode.ChildNodes.Count > 0) InitNode = Program.ParseNode(childNode.ChildNodes[0]);
                     if (childNode.ChildNodes.Count > 1) Console.WriteLine("[warn] For Init nodes had more than one child. Omitted.");
-                } else if (childNode.Name == "cond")
+                } else if (childNode.Name == "condition" || childNode.Name == "cond")
                 {
                     ConditionalNode = new ConditionalNode().FromXmlTag(childNode);
                 }
@@ -51,6 +51,10 @@ namespace xmlscript.FinalNodes
                 if((bool)ConditionalNode.Visit(newScope))
                 {
                     FunctionNode.Visit(newScope);
+                }else
+                {
+                    StepNode.Visit(newScope);
+                    break;
                 }
 
                 StepNode.Visit(newScope);
@@ -61,8 +65,9 @@ namespace xmlscript.FinalNodes
 
         public override string Transpile(Scope scope, Dictionary<string, object> args = null)
         {
+            Console.WriteLine(StepNode.GetType().Name);
             Scope newScope = Scope.FromParent(scope);
-            return @$"for({InitNode.Transpile(newScope)} {ConditionalNode.Transpile(newScope)}; {StepNode.Transpile(newScope)}) {{
+            return @$"for({InitNode.Transpile(newScope)} {ConditionalNode.Transpile(newScope)}; {StepNode.Transpile(newScope, new() { { "NoSemicolon", true }, { "Passdown", true } })}) {{
     {FunctionNode.Transpile(newScope)}
             }}";
         }

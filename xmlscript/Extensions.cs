@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,18 @@ namespace xmlscript
         public static string SemicolonOptional(Dictionary<string, object> args)
         {
             return (args != null && args["NoSemicolon"] != null && ((bool)args["NoSemicolon"])) ? "" : ";";
+        }
+
+        public static Dictionary<string, object> Passdown(Dictionary<string, object> args)
+        {
+            return (args != null && args["Passdown"] != null && ((bool)args["Passdown"])) ? GetWithoutPassdown(args) : null;
+        }
+
+        public static Dictionary<string, object> GetWithoutPassdown(Dictionary<string,object> args)
+        {
+            args.Remove("Passdown");
+
+            return args;
         }
     }
 }

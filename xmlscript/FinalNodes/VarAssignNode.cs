@@ -30,7 +30,9 @@ namespace xmlscript.FinalNodes
 
         public override string Transpile(Scope scope, Dictionary<string, object> args = null)
         {
-            return $"var {attrName} = {valueNode.Transpile(scope)}{Utils.SemicolonOptional(args)}";
+            var s = $"{(scope.Get(attrName) == null ? "var" : "")} {attrName} = {valueNode.Transpile(scope, Utils.Passdown(args))}{Utils.SemicolonOptional(args)}";
+            scope.Set(attrName, true);
+            return s;
         }
     }
 }

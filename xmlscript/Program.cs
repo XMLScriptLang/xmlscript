@@ -8,6 +8,10 @@ namespace xmlscript
     {
         public static void Main(string[] args)
         {
+            // load xmlscript.lib into currentdomain
+            var ___ = new XMLScript.Lib.__Dummy();
+            ___.__DummyMethod();
+            
             if(args.Length == 0)
             {
                 while(true)
