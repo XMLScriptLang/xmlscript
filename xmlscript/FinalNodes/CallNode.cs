@@ -43,7 +43,7 @@ namespace xmlscript.FinalNodes
 
         public override object Visit(Scope scope)
         {
-            var type = ResolveType(attrTypeTarget);
+            var type = attrTypeTarget.ResolveType();
             if (type == null) throw new Exception("Unable to resolve type target " + attrTypeTarget);
 
             object[] args = new object[argumentNodes.Count];
