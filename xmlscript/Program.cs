@@ -6,6 +6,8 @@ namespace xmlscript
 {
     public class Program
     {
+        private static Node parserCache;
+        
         public static void Main(string[] args)
         {
             // load xmlscript.lib into currentdomain
@@ -18,12 +20,40 @@ namespace xmlscript
                 {
                     Console.WriteLine("Path to run: ");
                     string path = Console.ReadLine();
-                    bool transpile = false;
+                    bool transpile = false, parseOnly = false;
 
-                    if (path.EndsWith("-t"))
+                    if (path == "")
                     {
-                        transpile = true;
-                        path = path.Substring(0, path.Length - 2);
+                        if (parserCache == null)
+                        {
+                            Console.WriteLine("No cached parse tree found!");
+                            continue;
+                        }
+                        Stopwatch sw = new();
+                        sw.Start();
+                        parserCache.Visit(new Scope());
+                        sw.Stop();
+                        Debug.WriteLine("Interpreting took " + sw.ElapsedMilliseconds + "ms");
+                        continue;
+                    }
+
+                    // read args
+                    string[] pathArgs = path.Split(' ');
+
+                    if (pathArgs.Length > 1)
+                    {
+                        path = pathArgs[0];
+                        for (int i = 1; i < pathArgs.Length; i++)
+                        {
+                            if (pathArgs[i] == "-t")
+                            {
+                                transpile = true;
+                            }
+                            else if (pathArgs[i] == "-p")
+                            {
+                                parseOnly = true;
+                            }
+                        }
                     }
 
                     XmlDocument doc = new XmlDocument();
@@ -38,6 +68,13 @@ namespace xmlscript
                         sw.Stop();
                         Debug.WriteLine("Parsing took " + sw.ElapsedMilliseconds + "ms");
 
+                        if (parseOnly)
+                        {
+                            parserCache = n;
+                            Console.WriteLine("Parsed successfully, enter empty path to execute cached.");
+                            continue;
+                        }
+                        
                         if (!transpile)
                         {
                             sw.Restart();

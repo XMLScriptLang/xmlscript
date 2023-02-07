@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,8 @@ namespace xmlscript
 {
     public static class Extensions
     {
+        private static Dictionary<string, Type> resolvedTypesCache = new();
+        
         public static string Join<T>(this IEnumerable<T> i, string sep)
         {
             string output = "";
@@ -20,6 +23,25 @@ namespace xmlscript
 
             if(output.Length >= sep.Length) output = output.Substring(0, output.Length-sep.Length);
             return output;
+        }
+
+        public static Type ResolveType(this string name)
+        {
+            if (resolvedTypesCache.ContainsKey(name)) return resolvedTypesCache[name];
+            
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type t in a.GetTypes())
+                {
+                    if (t.FullName == name || t.Name == name)
+                    {
+                        resolvedTypesCache.Add(name, t);
+                        return t;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 
