@@ -9,12 +9,20 @@ namespace xmlscript.FinalNodes
 {
     public class NumberNode : Node
     {
-        public double val;
+        public object val;
 
         public override Node FromXmlTag(XmlNode node)
         {
-            if (!double.TryParse(node.InnerText, out double tVal)) throw new Exception("NumberNode contains invalid number");
-            val = tVal;
+            if (node.InnerText.EndsWith(" : i32"))
+            {
+                if (!int.TryParse(node.InnerText.Substring(0, node.InnerText.Length - 6), out int tVal)) throw new Exception("NumberNode contains invalid number");
+                val = tVal;
+            }
+            else {
+                if (!double.TryParse(node.InnerText, out double tVal)) throw new Exception("NumberNode contains invalid number");
+                val = tVal;
+            }
+        
             return this;
         }
 

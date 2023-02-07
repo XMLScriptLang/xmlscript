@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -12,29 +11,20 @@ using System.Xml.Linq;
 
 namespace xmlscript.FinalNodes
 {
-    public class CallNode : Node
+    public class CreateNode : Node
     {
         public string attrTypeTarget = null;
-        public string attrMethodTarget = null;
-        public Node onNode = null;
 
         public List<Node> argumentNodes = new List<Node>();
 
         public override Node FromXmlTag(XmlNode node)
         {
             // todo: parse-time-existance check option
-            if (node.Attributes == null || node.Attributes["type"] == null || node.Attributes["method"] == null) throw new Exception("CallNode is missing type and/or method attribute.");
+            if (node.Attributes == null || node.Attributes["type"] == null) throw new Exception("CreateNode is missing type.");
             attrTypeTarget = node.Attributes["type"].Value;
-            attrMethodTarget = node.Attributes["method"].Value;
 
             foreach (XmlNode childNode in node.ChildNodes)
-            {
-                if(childNode.Name == "on")
-                {
-                    onNode = Program.ParseNode(childNode);
-                    continue;
-                }
-                
+            {                
                 argumentNodes.Add(Program.ParseNode(childNode));
             }
 
@@ -44,7 +34,20 @@ namespace xmlscript.FinalNodes
         public override object Visit(Scope scope)
         {
             var type = ResolveType(attrTypeTarget);
-            if (type == null) throw new Exception("Unable to resolve type target " + attrTypeTarget);
+            if (type == null)
+            {
+                string assemblyName = attrTypeTarget.Substring(0, attrTypeTarget.LastIndexOf('.'));
+                string typeName = attrTypeTarget.Substring(attrTypeTarget.LastIndexOf('.'));
+
+                try
+                {
+                    Activator.CreateInstance(assemblyName, typeName); // create dummy object to load assembly
+                    return Visit(scope);
+                }catch(Exception e)
+                {
+                    throw new Exception("Unable to resolve type target " + attrTypeTarget);
+                }
+            }
 
             object[] args = new object[argumentNodes.Count];
             Type[] argTypes = new Type[argumentNodes.Count];
@@ -53,18 +56,11 @@ namespace xmlscript.FinalNodes
                 args[i] = argumentNodes[i].Visit(scope);
                 argTypes[i] = args[i].GetType();
             }
-            
-            var method = type.GetMethod(attrMethodTarget, types: argTypes);
-            if (method == null) throw new Exception("Unable to resolve method target " + attrMethodTarget);
 
-            object executeOn = null;
-            
-            if (onNode != null)
-            {
-                executeOn = onNode.Visit(scope);
-            }
-            
-            return method.Invoke(executeOn, args);
+            var method = type.GetConstructor(types: argTypes);
+            if (method == null) throw new Exception("Unable to resolve constructor target. Wrong number or type of arguments?");
+
+            return method.Invoke(args);
         }
 
         public override string Transpile(Scope scope, Dictionary<string, object> args = null)
@@ -76,7 +72,7 @@ namespace xmlscript.FinalNodes
                 methodArgs.Add(argNode.Transpile(scope));
             }
 
-            return $"{attrTypeTarget}.{attrMethodTarget}({methodArgs.Join(", ")}){Utils.SemicolonOptional(args)}";
+            return $"new {attrTypeTarget}({methodArgs.Join(", ")}){Utils.SemicolonOptional(args)}";
         }
 
         public static Type ResolveType(string name)
