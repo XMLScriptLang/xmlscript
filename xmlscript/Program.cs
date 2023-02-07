@@ -91,6 +91,9 @@ namespace xmlscript
                 case "pass":
                 case "nop":
                     return new PassNode().FromXmlTag(node);
+                case "new":
+                case "create":
+                    return new CreateNode().FromXmlTag(node);
                 default:
                     if(node.Attributes != null && node.Attributes["ignore"] != null && node.Attributes["ignore"].Value != "true") throw new Exception("Unknown node: " + node.Name + ", you can add the ignore=\"true\" attribute to ignore this.");
                     return null;
